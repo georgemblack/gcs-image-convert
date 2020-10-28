@@ -1,5 +1,5 @@
 {
-  "name": "gcs-img-convert",
+  "name": "web-image-drop",
   "main": "app.js",
   "repository": "git@github.com:georgemblack/web-api.git",
   "author": "georgemblack <contact@george.black>",

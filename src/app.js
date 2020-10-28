@@ -13,6 +13,11 @@ const app = express();
 app.use(express.json());
 const port = process.env.PORT || 8080;
 
+app.get("/", async (req, res) => {
+  console.log(req.body);
+  res.status(200).send();
+});
+
 app.post("/", async (req, res) => {
   console.log(req.body);
   res.status(200).send();

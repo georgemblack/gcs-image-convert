@@ -3,7 +3,7 @@ ADD . /build
 WORKDIR /build
 RUN yarn
 
-FROM node:14-alpine
+FROM node:14-stretch
 ENV NODE_ENV=production
 COPY --from=build-env /build /app
 WORKDIR /app

@@ -8,7 +8,7 @@ const SOURCE_BUCKET_NAME = "image-drop.george.black";
 const DESTINATION_BUCKET_NAME = "media.george.black";
 
 // Image settings
-const IMAGE_MAX_WIDTH = 800;
+const IMAGE_MAX_WIDTH = 1216;
 
 // Express setup
 const app = express();

@@ -31,7 +31,7 @@ app.post("/", async (req, res) => {
   const eventType = message.attributes.eventType;
 
   if (eventType !== "OBJECT_FINALIZE") {
-    print(`Ignoring unrelated event type: ${eventType}`);
+    console.log(`Ignoring unrelated event type: ${eventType}`);
     return res.status(200).send(`Ignoring unrelated event type: ${eventType}`);
   }
 

@@ -58,7 +58,7 @@ app.post("/", async (req, res) => {
   }
 
   const original = await storage.bucket(data.bucket).file(data.name);
-  const exists = await original.exists()[0];
+  const [exists] = await original.exists();
 
   if (!exists) {
     console.log(`Ignoring event for nonexistent object: ${data.name}`);

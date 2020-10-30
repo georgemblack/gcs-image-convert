@@ -71,7 +71,7 @@ app.post("/", async (req, res) => {
   const name = data.name.split(".")[0];
   const extension = data.name.split(".").pop();
 
-  if (!(extension in ["jpg", "jpeg"])) {
+  if (!["jpg", "jpeg"].includes(extension)) {
     console.log(
       `Ignoring event for file with unsupported extension: ${data.name}`
     );

@@ -110,10 +110,10 @@ app.post("/", async (req, res) => {
     const outputWebpResponse = await outputWebp.save(outputWebpContents);
   } catch (err) {
     console.log(err);
-    res.status(500).send(`Error: Failed to process image: ${data.name}`);
+    return res.status(500).send(`Error: Failed to process image: ${data.name}`);
   }
 
-  res.status(200).send("Done");
+  return res.status(200).send("Done");
 });
 
 app.listen(port, () => console.log(`Instance started on port ${port}`));

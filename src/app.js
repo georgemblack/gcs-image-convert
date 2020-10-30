@@ -37,7 +37,7 @@ app.post("/", async (req, res) => {
 
   let data;
   try {
-    data = JSON.parse(Buffer.from(message.data).toString("base64"));
+    data = JSON.parse(Buffer.from(message.data, "base64").toString("ascii"));
   } catch (err) {
     console.log(err);
     return res

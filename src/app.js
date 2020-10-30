@@ -89,8 +89,9 @@ app.post("/", async (req, res) => {
       .resize({
         width: IMAGE_MAX_WIDTH,
       })
+      .withMetadata()
       .jpeg({
-        quality: 85,
+        quality: 90,
       })
       .toBuffer();
     const outputJpgResponse = await outputJpg.save(outputJpgContents);
@@ -103,8 +104,9 @@ app.post("/", async (req, res) => {
       .resize({
         width: IMAGE_MAX_WIDTH,
       })
+      .withMetadata()
       .webp({
-        quality: 85,
+        quality: 90,
       })
       .toBuffer();
     const outputWebpResponse = await outputWebp.save(outputWebpContents);

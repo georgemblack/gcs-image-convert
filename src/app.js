@@ -86,7 +86,9 @@ app.post("/", async (req, res) => {
       .bucket(DESTINATION_BUCKET_NAME)
       .file(`${name}.jpg`);
     const outputJpgContents = await sharp(originalContents)
-      .resize(IMAGE_MAX_WIDTH)
+      .resize({
+        width: IMAGE_MAX_WIDTH,
+      })
       .jpeg({
         quality: 85,
       })
@@ -98,7 +100,9 @@ app.post("/", async (req, res) => {
       .bucket(DESTINATION_BUCKET_NAME)
       .file(`${name}.webp`);
     const outputWebpContents = await sharp(originalContents)
-      .resize(IMAGE_MAX_WIDTH)
+      .resize({
+        width: IMAGE_MAX_WIDTH,
+      })
       .webp({
         quality: 85,
       })

@@ -3,7 +3,9 @@ const config = require("config");
 const sharp = require("sharp");
 const { Storage } = require("@google-cloud/storage");
 
-const storage = new Storage();
+// Configs
+const SOURCE_BUCKET_NAME = "image-drop.george.black";
+const DESTINATION_BUCKET_NAME = "media.george.black";
 
 // Image settings
 const IMAGE_MAX_WIDTH = 800;
@@ -12,6 +14,8 @@ const IMAGE_MAX_WIDTH = 800;
 const app = express();
 app.use(express.json());
 const port = process.env.PORT || 8080;
+
+const storage = new Storage();
 
 app.get("/", async (req, res) => {
   return res.status(200).send();
@@ -27,10 +31,8 @@ app.post("/", async (req, res) => {
   const eventType = message.attributes.eventType;
 
   if (eventType !== "OBJECT_FINALIZE") {
-    print(`Ignoring unrelated Cloud Storage event type: ${eventType}`);
-    return res
-      .status(200)
-      .send(`Ignoring unrelated Cloud Storage event type: ${eventType}`);
+    print(`Ignoring unrelated event type: ${eventType}`);
+    return res.status(200).send(`Ignoring unrelated event type: ${eventType}`);
   }
 
   let data;
@@ -50,7 +52,58 @@ app.post("/", async (req, res) => {
       .send("Bad Request: Expected name/bucket in notification");
   }
 
-  res.status(200).send("Happy path");
+  if (data.bucket !== SOURCE_BUCKET_NAME) {
+    console.log(`Ignoring event for bucket: ${data.bucket}`);
+    return res.status(200).send(`Ignoring event for bucket: ${data.bucket}`);
+  }
+
+  const original = await storage.bucket(data.bucket).file(data.name);
+  const exists = await original.exists()[0];
+
+  if (!exists) {
+    console.log(`Ignoring event for nonexistent object: ${data.name}`);
+    return res
+      .status(200)
+      .send(`Ignoring event for nonexistent object: ${data.name}`);
+  }
+
+  const originalContents = await file.download()[0];
+  const name = data.name.split(".")[0];
+  const extension = data.name.split(".").pop();
+
+  if (!(extension in ["jpg", "jpeg"])) {
+    console.log(
+      `Ignoring event for file with unsupported extension: ${data.name}`
+    );
+    return res
+      .status(200)
+      .send(`Ignoring event for file with unsupported extension: ${data.name}`);
+  }
+
+  try {
+    // generate jpg
+    const outputJpg = await storage
+      .bucket(DESTINATION_BUCKET_NAME)
+      .file(`${name}.jpg`);
+    const outputJpgContents = await sharp(originalContents)
+      .resize(IMAGE_MAX_WIDTH)
+      .toBuffer();
+    const outputJpgResponse = await outputJpg.save(outputJpgContents);
+
+    // generate webp
+    const outputWebp = await storage
+      .bucket(DESTINATION_BUCKET_NAME)
+      .file(`${name}.webp`);
+    const outputWebpContents = await sharp(originalContents)
+      .resize(IMAGE_MAX_WIDTH)
+      .toBuffer();
+    const outputWebpResponse = await outputWebp.save(outputWebpContents);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(`Error: Failed to process image: ${data.name}`);
+  }
+
+  res.status(200).send("Done");
 });
 
 app.listen(port, () => console.log(`Instance started on port ${port}`));

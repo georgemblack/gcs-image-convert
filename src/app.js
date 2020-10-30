@@ -67,7 +67,7 @@ app.post("/", async (req, res) => {
       .send(`Ignoring event for nonexistent object: ${data.name}`);
   }
 
-  const originalContents = await original.download()[0];
+  const [originalContents] = await original.download();
   const name = data.name.split(".")[0];
   const extension = data.name.split(".").pop();
 

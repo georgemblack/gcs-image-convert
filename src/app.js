@@ -37,7 +37,7 @@ app.post("/", async (req, res) => {
 
   let data;
   try {
-    data = JSON.parse(btoa(message.data));
+    data = JSON.parse(Buffer.from(message.data).toString("base64"));
   } catch (err) {
     console.log(err);
     return res

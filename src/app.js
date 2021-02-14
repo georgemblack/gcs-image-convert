@@ -107,6 +107,21 @@ app.post("/", async (req, res) => {
       })
       .toBuffer();
     const outputWebpResponse = await outputWebp.save(outputWebpContents);
+
+    // generate avif
+    const outputAvif = await storage
+      .bucket(DESTINATION_BUCKET_NAME)
+      .file(`${name}.avif`);
+    const outputAvifContents = await sharp(originalContents)
+      .resize({
+        width: IMAGE_MAX_WIDTH,
+      })
+      .rotate()
+      .avif({
+        quality: 85,
+      })
+      .toBuffer();
+    const outputAvifResponse = await outputAvif.save(outputAvifContents);
   } catch (err) {
     console.log(err);
     return res.status(500).send(`Error: Failed to process image: ${data.name}`);

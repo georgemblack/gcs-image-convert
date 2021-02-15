@@ -102,9 +102,7 @@ app.post("/", async (req, res) => {
         width: IMAGE_MAX_WIDTH,
       })
       .rotate()
-      .webp({
-        quality: 85,
-      })
+      .webp()
       .toBuffer();
     const outputWebpResponse = await outputWebp.save(outputWebpContents);
 

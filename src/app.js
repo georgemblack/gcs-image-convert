@@ -118,7 +118,7 @@ app.post("/", async (req, res) => {
       })
       .rotate()
       .avif({
-        quality: 85,
+        quality: 60,
       })
       .toBuffer();
     const outputAvifResponse = await outputAvif.save(outputAvifContents);

@@ -20,7 +20,7 @@ steps:
     - '--max-instances'
     - '25'
     - '--memory'
-    - '1Gi'
+    - '2Gi'
     - '--platform'
     - 'managed'
     - '--service-account'

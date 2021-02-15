@@ -14,7 +14,7 @@ steps:
     - '--region'
     - 'us-east1'
     - '--concurrency'
-    - '1'
+    - '2'
     - '--cpu'
     - '1'
     - '--max-instances'

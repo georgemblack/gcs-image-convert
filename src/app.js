@@ -93,19 +93,6 @@ app.post("/", async (req, res) => {
       .toBuffer();
     const outputJpgResponse = await outputJpg.save(outputJpgContents);
 
-    // generate webp
-    const outputWebp = await storage
-      .bucket(DESTINATION_BUCKET_NAME)
-      .file(`${name}.webp`);
-    const outputWebpContents = await sharp(originalContents)
-      .resize({
-        width: IMAGE_MAX_WIDTH,
-      })
-      .rotate()
-      .webp()
-      .toBuffer();
-    const outputWebpResponse = await outputWebp.save(outputWebpContents);
-
     // generate avif
     const outputAvif = await storage
       .bucket(DESTINATION_BUCKET_NAME)
